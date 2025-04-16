@@ -1,5 +1,19 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+git filter-repo --commit-callback '
+commits_to_change = [
+    b"e618fde4dc51275b0c6b635f4a6868b81f51a914",
+    b"2f2e59fcf9e2ff533b5d5ea200c1601e1122b5c3",
+    b"36e00d4b69b667cb57cfd69d5fb5772eb15e81af",
+    b"8e3e399691d254ae72e03316d428b0617f1d9f4c",
+    b"dc6d83ea91a3cfd6af3a723929289365e5e80f2a",
+    b"c32bfb59992377bb781e2670d46a7ea0fdefdb1c",
+]
+if commit.original_id in commits_to_change:
+    commit.author_name = b"Andre"
+    commit.author_email = b"181968121+AndreSurnmae@users.noreply.github.com"
+    commit.committer_name = b"Andre"
+    commit.committer_email = b"181968121+AndreSurnmae@users.noreply.github.com"
+' --force
 # dependencies
 /node_modules
 /.pnp
