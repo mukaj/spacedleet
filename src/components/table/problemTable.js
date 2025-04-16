@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -7,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import APIClient from "@/lib/axios";
 
 export const ProblemTable = ({ filteredProblems, toggleSolved }) => {
   return (
@@ -19,7 +22,7 @@ export const ProblemTable = ({ filteredProblems, toggleSolved }) => {
             <TableHead className="w-24 text-gray-300">Difficulty</TableHead>
             <TableHead className="w-36 text-gray-300">Last Reviewed</TableHead>
             <TableHead className="w-36 text-gray-300">Next Review</TableHead>
-            <TableHead className="text-gray-300">Tags</TableHead>
+            <TableHead className="text-gray-300">Complete</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -62,6 +65,32 @@ export const ProblemTable = ({ filteredProblems, toggleSolved }) => {
                   {userProblem.nextReview
                     ? new Date(userProblem.nextReview).toLocaleDateString()
                     : "-"}
+                </TableCell>
+                <TableCell>
+                  <select
+                    className="bg-gray-700 text-white rounded-md p-1"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value) {
+                        APIClient.post(`problems/${userProblem.id}/review`, {
+                          score: value,
+                        })
+                          .then((response) => {
+                            console.log("Update successful:", response.data);
+                          })
+                          .catch((error) => {
+                            console.error("Error updating problem:", error);
+                          });
+                      }
+                    }}
+                  >
+                    <option value="">Select</option>
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <option key={num} value={num}>
+                        {num}
+                      </option>
+                    ))}
+                  </select>
                 </TableCell>
               </TableRow>
             ))

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Search, X } from "lucide-react";
-import axios from "axios";
+import APIClient from "@/lib/axios";
 
 export default function ProblemTracker() {
   const [problems, setProblems] = useState([]);
@@ -31,13 +31,7 @@ export default function ProblemTracker() {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const token =
-          "oat_Mw.bmFuQ3pZWVotX0dBclJDVGMwWUFBYXc1QTZ4RWxCWi1CMGZNVXQzejM3MDc4MjkwNzA";
-        const response = await axios.get("http://localhost:3333/problems", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await APIClient.get("problems");
         setProblems(response.data);
         console.log("Fetched problems:", response.data);
       } catch (error) {
