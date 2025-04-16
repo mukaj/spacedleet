@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +11,29 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import APIClient from "@/lib/axios";
+import { useState } from "react";
 
 export function LoginForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await APIClient.post("/session", {
+        email,
+        password,
+      });
+      console.log("Login successful:", response.data);
+      localStorage.setItem("access_token", response.data.token);
+      window.location.href = "/table";
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Card>
@@ -30,6 +53,8 @@ export function LoginForm() {
                   type="email"
                   placeholder="you@humber.ca"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -42,9 +67,15 @@ export function LoginForm() {
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" onClick={handleSubmit}>
                 Login
               </Button>
             </div>
