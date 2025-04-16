@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +11,31 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import APIClient from "@/lib/axios";
+import { useState } from "react";
 
 export function SignupForm({ className, ...props }) {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await APIClient.post("/session/register", {
+        email,
+        password,
+        full_name: name,
+      });
+      console.log("Login successful:", response.data);
+      localStorage.setItem("access_token", response.data.token);
+      window.location.href = "/table";
+    } catch (error) {
+      console.error("Login failed:", error.response.data);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Card>
@@ -28,6 +53,8 @@ export function SignupForm({ className, ...props }) {
                   type="text"
                   placeholder="Student Name"
                   required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -37,21 +64,26 @@ export function SignupForm({ className, ...props }) {
                   type="email"
                   placeholder="you@humber.ca"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
                 <Input id="confirmPassword" type="password" required />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" onClick={handleSubmit}>
                 Sign Up
-              </Button>
-              <Button variant="outline" className="w-full">
-                Sign Up with Google
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
