@@ -18,6 +18,7 @@ export default function ProblemTracker() {
   const [searchTerm, setSearchTerm] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     const fetchProblems = async () => {
@@ -31,7 +32,7 @@ export default function ProblemTracker() {
     };
 
     fetchProblems();
-  }, []);
+  }, [refresh]);
 
   const filteredProblems = problems.filter((userProblem) => {
     const matchesSearch = userProblem.problem.title
@@ -97,7 +98,10 @@ export default function ProblemTracker() {
         </div>
       </div>
 
-      <ProblemTable filteredProblems={filteredProblems}></ProblemTable>
+      <ProblemTable
+        filteredProblems={filteredProblems}
+        setRefresh={setRefresh}
+      ></ProblemTable>
       <div className="text-sm text-gray-400">
         Showing {filteredProblems.length} of {problems.length} problems
       </div>

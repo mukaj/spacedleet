@@ -11,7 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import APIClient from "@/lib/axios";
 
-export const ProblemTable = ({ filteredProblems, toggleSolved }) => {
+export const ProblemTable = ({ filteredProblems, setRefresh }) => {
   return (
     <div className="rounded-md border border-gray-700">
       <Table className="bg-gray-800 text-white">
@@ -81,6 +81,8 @@ export const ProblemTable = ({ filteredProblems, toggleSolved }) => {
                           .catch((error) => {
                             console.error("Error updating problem:", error);
                           });
+                        setRefresh((prev) => prev + 1);
+                        e.target.value = "";
                       }
                     }}
                   >
