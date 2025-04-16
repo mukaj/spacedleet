@@ -89,7 +89,7 @@ export default function ProblemTracker() {
           </Select>
 
           <Button
-            onClick={() => router.push("/add")}
+            onClick={() => router.push("/table/create")}
             className="bg-blue-600 hover:bg-blue-700 text-white"
           >
             <Plus className="h-4 w-4 mr-2" />
