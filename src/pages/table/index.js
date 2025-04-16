@@ -53,11 +53,14 @@ export default function ProblemTracker() {
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
 
+    const matchesStatus =
+      statusFilter === "all" || userProblem.isDue == (statusFilter === "due");
+
     const matchesDifficulty =
       difficultyFilter === "all" ||
       userProblem.problem.difficulty === difficultyFilter;
 
-    return matchesSearch && matchesDifficulty;
+    return matchesSearch && matchesDifficulty && matchesStatus;
   });
 
   return (
@@ -92,8 +95,8 @@ export default function ProblemTracker() {
             </SelectTrigger>
             <SelectContent className="bg-gray-800 text-white">
               <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="solved">Solved</SelectItem>
-              <SelectItem value="unsolved">Unsolved</SelectItem>
+              <SelectItem value="due">Due</SelectItem>
+              <SelectItem value="notdue">Not Due</SelectItem>
             </SelectContent>
           </Select>
 
